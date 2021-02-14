@@ -1,0 +1,38 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MouseLook : MonoBehaviour
+{
+    public float mouseSen = 100f;
+    public Transform playerBody;
+    float xRotation = 0f;
+    public bool holdShift;
+    // Start is called before the first frame update
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        holdShift = Input.GetKey("space");
+        if (holdShift)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            float mouseX = Input.GetAxis("Mouse X") * mouseSen * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSen * Time.deltaTime;
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            playerBody.Rotate(Vector3.up * mouseX);
+        }
+        
+
+    }
+}
